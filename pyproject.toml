@@ -11,6 +11,7 @@ dev = [
     "mypy>=1.19.0",
     "pre-commit>=4.5.0",
     "pytest>=9.0.2",
+    "pytest-cov>=7.0.0",
     "ruff>=0.14.8",
 ]
 
@@ -44,7 +45,7 @@ ignore_missing_imports = true
 
 
 [tool.pytest.ini_options]
-testpaths = ["tests"]
+testpaths = ["src/test_colloc.py"]
 pythonpath = ["."]
 
 [tool.coverage.run]
