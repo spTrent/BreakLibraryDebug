@@ -52,50 +52,41 @@ class Library:
                 print(f'"{book.title}"', end=', ')
             print()
 
+    def find_on_title(self, item: str) -> BookCollection:
+        books = BookCollection()
+        for book in self.BookColl:
+            if item.lower() in book.title.lower():
+                books += book
+        if not books:
+            raise ValueError('Нет книги с таким названием')
+        return books
 
-book1 = Book(
-    title='1984',
-    author='Джордж Оруэлл',
-    year=1949,
-    genre='Антиутопия',
-    isbn='978-5-17-094767-7',
-)
-book2 = Book(
-    title='Задача трёх тел',
-    author='Лю Цысинь',
-    year=2008,
-    genre='Научная фантастика',
-    isbn='978-5-699-85882-9',
-)
-book3 = Book(
-    title='Преступление и наказание',
-    author='Фёдор Достоевский',
-    year=1866,
-    genre='Классическая литература',
-    isbn='978-5-04-116327-2',
-)
-book4 = Book(
-    title='Хоббит, или Туда и обратно',
-    author='Дж. Р. Р. Толкин',
-    year=1937,
-    genre='Фэнтези',
-    isbn='978-5-17-081691-1',
-)
-book5 = Book(
-    title='Мастер и Маргарита',
-    author='Михаил Булгаков',
-    year=1967,
-    genre='Роман',
-    isbn='978-5-389-01777-7',
-)
-book6 = Book(
-    title='2025 год',
-    author='Джордж Оруэлл',
-    year=1967,
-    genre='Фэнтези',
-    isbn='978-5-17-094767-7',
-)
+    def find_on_genre(self, item: str) -> BookCollection:
+        books = BookCollection()
+        for book in self.BookColl:
+            if book.genre.lower() == item.lower():
+                books += book
+        if not books:
+            raise ValueError('Нет книг этого жанра')
+        return books
 
-books = [book1, book2, book3, book4, book5, book6]
-lib = Library(books)
-lib()
+    def find_on_author(self, item: str) -> BookCollection:
+        books = BookCollection()
+        for author in self.IdxDict.author:
+            if item.lower() in author.lower():
+                books += BookCollection(self.IdxDict[author])
+        if not books:
+            raise ValueError('Нет книг этого автора')
+        return books
+
+    def find_on_isbn(self, item: str) -> Book:
+        if item in self.IdxDict.isbn:
+            return self.IdxDict.isbn[item][0]
+        raise ValueError('Нет книги с таким ISBN')
+
+    def find_on_year(self, item: str | int) -> BookCollection:
+        if isinstance(item, int):
+            item = str(item)
+        if item in self.IdxDict.year:
+            return BookCollection(self.IdxDict.year[item])
+        raise ValueError('Нет книг с таким годом выпуска')

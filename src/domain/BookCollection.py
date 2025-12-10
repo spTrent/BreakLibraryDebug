@@ -14,6 +14,9 @@ class BookCollection:
     def __len__(self) -> int:
         return len(self.books)
 
+    def __bool__(self) -> bool:
+        return len(self.books) > 0
+
     def __getitem__(self, item: int | slice) -> 'Book | BookCollection':
         if isinstance(item, Book):
             return self.books[item]
