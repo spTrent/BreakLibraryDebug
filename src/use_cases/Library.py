@@ -1,5 +1,8 @@
+import random
+
 from ..domain.Book import Book
 from ..domain.BookCollection import BookCollection
+from ..domain.consts import authors, genres, isbns, titles, years
 from ..domain.IndexDict import IndexDict
 
 
@@ -15,18 +18,19 @@ class Library:
 
     def append(self, source: 'BookCollection | Book') -> None:
         self.BookColl += source
-        self.IdxDict = IndexDict.create(self.BookColl)
 
     def remove(self, source: 'BookCollection | Book') -> None:
         self.BookColl -= source
-        self.IdxDict = IndexDict.create(self.BookColl)
 
     def __add__(self, source: 'Library') -> 'Library':
         self.BookColl += source.BookColl
-        self.IdxDict += source.IdxDict
         return self
 
+    def update_index(self) -> None:
+        self.IdxDict = IndexDict.create(self.BookColl)
+
     def __call__(self) -> None:
+        self.update_index()
         print('Книги в наличии: ')
         for number, book in enumerate(self.BookColl, start=1):
             print(f'{number}. "{book.title}"')
@@ -90,3 +94,78 @@ class Library:
         if item in self.IdxDict.year:
             return BookCollection(self.IdxDict.year[item])
         raise ValueError('Нет книг с таким годом выпуска')
+
+    def randomly_change_genre(self) -> None:
+        book = self.BookColl.random_pick()
+        new_genre = random.choice(genres)
+        book.genre = new_genre
+        print(f'Изменил жанр книги "{book.title}" на {new_genre}')
+
+    def run_simulation(self, steps: int = 20, seed: int | None = None) -> None:
+        random.seed(seed)
+        actions = [
+            self.append,
+            self.remove,
+            self.find_on_title,
+            self.find_on_genre,
+            self.find_on_author,
+            self.find_on_isbn,
+            self.find_on_year,
+            self.update_index,
+            self.randomly_change_genre,
+        ]
+        for number in range(1, steps + 1):
+            print(f'Шаг номер {number}:')
+            pick = random.choice(actions)
+            book = Book(
+                random.choice(titles),
+                random.choice(authors),
+                random.choice(years),
+                random.choice(genres),
+                random.choice(isbns),
+            )
+            print(f'Выполнение действия {pick.__name__}')
+            try:
+                match pick:
+                    case self.append:
+                        print('Добавил книгу: ')
+                        print(book)
+                        self.append(book)
+
+                    case self.remove:
+                        self.remove(book)
+                        print('Удалил книгу')
+                        print(book)
+
+                    case self.find_on_title:
+                        print(f'Поиск по названию "{book.title}"')
+                        print(self.find_on_title(book.title))
+
+                    case self.find_on_genre:
+                        print(f'Поиск по жанру "{book.genre}"')
+                        print(self.find_on_genre(book.genre))
+
+                    case self.find_on_author:
+                        print(f'Поиск по автору {book.author}')
+                        print(self.find_on_author(book.author))
+
+                    case self.find_on_isbn:
+                        print(f'Поиск по isbn {book.isbn}')
+                        print(self.find_on_isbn(book.isbn))
+
+                    case self.find_on_year:
+                        print(f'Поиск по году выпуска {book.year}')
+                        print(self.find_on_year(book.year))
+
+                    case self.update_index:
+                        print('Обновил индекс')
+                        self.update_index()
+
+                    case self.randomly_change_genre:
+                        new_genre = random.choice(genres)
+                        print(f'Изменил жанр "{book.title}" на {new_genre}')
+                        self.randomly_change_genre()
+
+            except ValueError as msg:
+                print(msg)
+            print('-' * 30)
