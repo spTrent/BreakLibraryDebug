@@ -2,7 +2,7 @@ import random
 
 from ..domain.Book import Book
 from ..domain.BookCollection import BookCollection
-from ..domain.consts import authors, genres, isbns, titles, years
+from ..domain.consts import authors, genres, isbns, titles
 from ..domain.IndexDict import IndexDict
 
 
@@ -99,7 +99,7 @@ class Library:
         book = self.BookColl.random_pick()
         new_genre = random.choice(genres)
         book.genre = new_genre
-        print(f'Изменил жанр книги "{book.title}" на {new_genre}')
+        print(f'Изменил жанр книги "{book.title}" на "{new_genre}"')
 
     def run_simulation(self, steps: int = 20, seed: int | None = None) -> None:
         random.seed(seed)
@@ -120,7 +120,7 @@ class Library:
             book = Book(
                 random.choice(titles),
                 random.choice(authors),
-                random.choice(years),
+                random.randint(1900, 2025),
                 random.choice(genres),
                 random.choice(isbns),
             )
@@ -162,8 +162,6 @@ class Library:
                         self.update_index()
 
                     case self.randomly_change_genre:
-                        new_genre = random.choice(genres)
-                        print(f'Изменил жанр "{book.title}" на {new_genre}')
                         self.randomly_change_genre()
 
             except ValueError as msg:
