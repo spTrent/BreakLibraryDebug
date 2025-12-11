@@ -30,6 +30,9 @@ class ShelfOfBooks(BookCollection):
             ValueError: Если max_len <= 0 или
             количество книг превышает max_len.
         """
+        if max_len <= 0:
+            raise ValueError(f'Размер полки не может быть {max_len}')
+
         if books is None:
             books = []
 
@@ -38,9 +41,6 @@ class ShelfOfBooks(BookCollection):
                 f"""Слишком много книг ({len(books)}).
                 Вместимость полки - {max_len}"""
             )
-
-        if max_len <= 0:
-            raise ValueError(f'Размер полки не может быть {max_len}')
 
         shelf = ShelfOfBooks(max_len, books)
         return shelf

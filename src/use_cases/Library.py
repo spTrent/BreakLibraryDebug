@@ -192,8 +192,8 @@ class Library:
         Raises:
             ValueError: Если книги с таким годом выпуска не найдены.
         """
-        if isinstance(item, int):
-            item = str(item)
+        if isinstance(item, str):
+            item = int(item)
 
         if item in self.IdxDict.year:
             return BookCollection(self.IdxDict.year[item])
@@ -232,12 +232,9 @@ class Library:
         for number in range(1, steps + 1):
             print(f'Шаг номер {number}:')
             pick = random.choice(actions)
+            idx = random.randint(0, 7)
             book = Book(
-                random.choice(titles),
-                random.choice(authors),
-                random.randint(1900, 2025),
-                random.choice(genres),
-                random.choice(isbns),
+                titles[idx], authors[idx], 1900, genres[idx], isbns[idx]
             )
 
             print(f'Выполнение действия {pick.__name__}')

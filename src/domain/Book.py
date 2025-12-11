@@ -1,3 +1,6 @@
+from typing import Any
+
+
 class Book:
     def __init__(
         self,
@@ -14,6 +17,16 @@ class Book:
         self.genre = genre
         self.isbn = isbn
         self.cost = cost
+
+    def __eq__(self, other: Any) -> bool:
+        if not isinstance(other, Book):
+            return False
+        return (
+            self.title == other.title
+            and self.author == other.author
+            and self.genre == other.genre
+            and self.isbn == other.isbn
+        )
 
     def __str__(self) -> str:
         return f"""Книга: "{self.title}".
