@@ -17,3 +17,4 @@ if __name__ == '__main__':
         books.append(book)
     lib = Library(books)
     lib()
+    lib.run_simulation()
