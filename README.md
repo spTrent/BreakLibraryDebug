@@ -189,3 +189,54 @@ lib1()
 
 Доказательства:
 ![11](images/None.png)
+
+---
+
+### Ошибка 7 — некорректная работа метода `__add__` в `ShelfOfBooks`
+Место: `ShelfOfBooks.py`, метод `__add__`
+
+Симптом:
+![12](images/FalseOutput.png)
+
+Как воспроизвести:
+```
+if __name__ == '__main__':
+    books = []
+    for _ in range(2):
+        book = Book(
+            random.choice(titles),
+            random.choice(authors),
+            random.randint(1900, 2025),
+            random.choice(genres),
+            random.choice(isbns),
+        )
+        books.append(book)
+    shelf1 = ShelfOfBooks(3, books)
+    book = Book(
+            random.choice(titles),
+            random.choice(authors),
+            random.randint(1900, 2025),
+            random.choice(genres),
+            random.choice(isbns),
+        )
+    shelf1 += book
+    print(shelf1)
+```
+
+Отладка:
+Установлен breakpoint на метод `__add__`.
+
+В отладчике видно, что max_len = 3, текущая длина = 2, хочу добавить одну книгу
+она должна добавиться, но выводится "Невозможно добавить, потому что полка полностью заполнена"
+
+Причина:
+Неправильное граничное условие `if isinstance(source, Book) and len(self) + 1 < self.max_len`.
+
+Исправление:
+`if isinstance(source, Book) and len(self) + 1 <= self.max_len`
+
+Проверка:
+запустить тот же main, убедиться, что книга добавяется.
+
+Доказательства:
+![13](images/IncorrectIf.png)

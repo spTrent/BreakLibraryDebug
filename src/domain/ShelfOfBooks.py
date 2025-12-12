@@ -52,15 +52,15 @@ class ShelfOfBooks(BookCollection):
         Returns:
             ShelfOfBooks: Текущий объект полки.
         """
-        if isinstance(source, Book) and len(self) + 1 < self.max_len: # неверное логическое условие (полка может быть заполнена полностью, то есть <=)
+        if isinstance(source, Book) and len(self) + 1 <= self.max_len:
             super().__add__(source)
         elif isinstance(source, Book):
             print('Невозможно добавить, потому что полка полностью заполнена')
         elif (
             isinstance(source, BookCollection)
-            and len(source) + len(self) < self.max_len # здесь та же ошибка
+            and len(source) + len(self) <= self.max_len
         ):
             super().__add__(source)
         else:
-            print('Невозможно добавитьпотому что полка будет переполнена')
+            print('Невозможно добавить, потому что полка будет переполнена')
         return self
