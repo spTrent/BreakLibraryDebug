@@ -14,8 +14,6 @@ class Library:
         Args:
             books: Начальный список книг. По умолчанию None.
         """
-        if books is None:
-            books = []
         self.BookColl = BookCollection(books)
         self.IdxDict = IndexDict.create(self.BookColl)
 

@@ -33,9 +33,6 @@ class ShelfOfBooks(BookCollection):
         if max_len <= 0:
             raise ValueError(f'Размер полки не может быть {max_len}')
 
-        if books is None:
-            books = []
-
         if len(books) > max_len:
             raise ValueError(
                 f"""Слишком много книг ({len(books)}).
@@ -55,13 +52,13 @@ class ShelfOfBooks(BookCollection):
         Returns:
             ShelfOfBooks: Текущий объект полки.
         """
-        if isinstance(source, Book) and len(self) + 1 <= self.max_len:
+        if isinstance(source, Book) and len(self) + 1 < self.max_len: # неверное логическое условие (полка может быть заполнена полностью, то есть <=)
             super().__add__(source)
         elif isinstance(source, Book):
             print('Невозможно добавить, потому что полка полностью заполнена')
         elif (
             isinstance(source, BookCollection)
-            and len(source) + len(self) <= self.max_len
+            and len(source) + len(self) < self.max_len # здесь та же ошибка
         ):
             super().__add__(source)
         else:
