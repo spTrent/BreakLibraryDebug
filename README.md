@@ -161,7 +161,7 @@ class BookCollection:
 Место: `Library.py`, метод `__add__`
 
 Симптом:
-![10](Images/ConsoleError.png)
+![10](images/ConsoleError.png)
 
 Как воспроизвести:
 ```
